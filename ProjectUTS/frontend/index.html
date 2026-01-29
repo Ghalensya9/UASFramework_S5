@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Sistem Manajemen Perpustakaan Digital - Kelola buku, anggota, dan peminjaman dengan mudah">
+    <title>LibraFlow - Sistem Manajemen Perpustakaan</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Loading Overlay -->
+    <div id="loading-overlay" class="loading-overlay">
+        <div class="loader">
+            <div class="book">
+                <div class="book-page"></div>
+                <div class="book-page"></div>
+                <div class="book-page"></div>
+            </div>
+            <p>Memuat LibraFlow...</p>
+        </div>
+    </div>
+
+    <!-- Login Page -->
+    <div id="login-page" class="page login-page">
+        <div class="login-container">
+            <div class="login-left">
+                <div class="brand-section">
+                    <div class="logo">
+                        <i class="fas fa-book-open"></i>
+                    </div>
+                    <h1>LibraFlow</h1>
+                    <p class="tagline">Sistem Manajemen Perpustakaan Digital</p>
+                </div>
+                <div class="features-preview">
+                    <div class="feature-item">
+                        <i class="fas fa-books"></i>
+                        <span>Kelola Koleksi Buku</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-users"></i>
+                        <span>Manajemen Anggota</span>
+                    </div>
+                    <div class="feature-item">
+                        <i class="fas fa-exchange-alt"></i>
+                        <span>Tracking Peminjaman</span>
+                    </div>
+                </div>
+            </div>
+            <div class="login-right">
+                <div class="login-form-container">
+                    <div class="form-header">
+                        <h2>Selamat Datang</h2>
+                        <p>Masuk ke akun Anda untuk melanjutkan</p>
+                    </div>
+                    
+                    <form id="login-form" class="auth-form">
+                        <div class="form-group">
+                            <label for="login-username">
+                                <i class="fas fa-user"></i>
+                                Username
+                            </label>
+                            <input type="text" id="login-username" name="username" placeholder="Masukkan username" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">
+                                <i class="fas fa-lock"></i>
+                                Password
+                            </label>
+                            <div class="password-input-wrapper">
+                                <input type="password" id="login-password" name="password" placeholder="Masukkan password" required>
+                                <button type="button" class="toggle-password" onclick="togglePassword('login-password')">
+                                    <i class="fas fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <div id="login-error" class="error-message hidden"></div>
+                        <button type="submit" class="btn btn-primary btn-full">
+                            <i class="fas fa-sign-in-alt"></i>
+                            Masuk
+                        </button>
+                    </form>
+                    
+                    <div class="auth-divider">
+                        <span>atau</span>
+                    </div>
+                    
+                    <button class="btn btn-outline btn-full" onclick="showRegisterForm()">
+                        <i class="fas fa-user-plus"></i>
+                        Buat Akun Baru
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Register Modal -->
+    <div id="register-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideRegisterForm()"></div>
+        <div class="modal-content register-modal">
+            <button class="modal-close" onclick="hideRegisterForm()">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2><i class="fas fa-user-plus"></i> Daftar Akun Baru</h2>
+                <p>Isi form berikut untuk membuat akun</p>
+            </div>
+            <form id="register-form" class="auth-form">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="reg-firstname">Nama Depan</label>
+                        <input type="text" id="reg-firstname" name="first_name" placeholder="Nama depan">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-lastname">Nama Belakang</label>
+                        <input type="text" id="reg-lastname" name="last_name" placeholder="Nama belakang">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="reg-username">Username *</label>
+                    <input type="text" id="reg-username" name="username" placeholder="Pilih username" required>
+                </div>
+                <div class="form-group">
+                    <label for="reg-email">Email</label>
+                    <input type="email" id="reg-email" name="email" placeholder="email@example.com">
+                </div>
+                <div class="form-group">
+                    <label for="reg-password">Password *</label>
+                    <div class="password-input-wrapper">
+                        <input type="password" id="reg-password" name="password" placeholder="Minimal 6 karakter" required minlength="6">
+                        <button type="button" class="toggle-password" onclick="togglePassword('reg-password')">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                    </div>
+                </div>
+                <div id="register-error" class="error-message hidden"></div>
+                <button type="submit" class="btn btn-primary btn-full">
+                    <i class="fas fa-check"></i>
+                    Daftar Sekarang
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Main Application -->
+    <div id="main-app" class="page hidden">
+        <!-- Sidebar -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-small">
+                    <i class="fas fa-book-open"></i>
+                </div>
+                <h2>LibraFlow</h2>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="#" class="nav-item active" data-page="dashboard">
+                    <i class="fas fa-home"></i>
+                    <span>Dashboard</span>
+                </a>
+                <a href="#" class="nav-item" data-page="buku">
+                    <i class="fas fa-book"></i>
+                    <span>Daftar Buku</span>
+                </a>
+                <a href="#" class="nav-item" data-page="anggota">
+                    <i class="fas fa-users"></i>
+                    <span>Anggota</span>
+                </a>
+                <a href="#" class="nav-item" data-page="peminjaman">
+                    <i class="fas fa-exchange-alt"></i>
+                    <span>Peminjaman</span>
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <div class="user-info" id="user-info">
+                    <div class="user-avatar">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <div class="user-details">
+                        <span class="user-name" id="display-username">User</span>
+                        <span class="user-role">Administrator</span>
+                    </div>
+                </div>
+                <button class="btn-logout" onclick="logout()">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <span>Logout</span>
+                </button>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Top Bar -->
+            <header class="top-bar">
+                <button class="menu-toggle" onclick="toggleSidebar()">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <div class="page-title-wrapper">
+                    <h1 id="page-title">Dashboard</h1>
+                    <p id="page-subtitle">Selamat datang di LibraFlow</p>
+                </div>
+                <div class="top-bar-actions">
+                    <a href="http://127.0.0.1:8000/api/docs/" target="_blank" class="btn btn-outline btn-sm">
+                        <i class="fas fa-file-alt"></i>
+                        API Docs
+                    </a>
+                </div>
+            </header>
+
+            <!-- Content Area -->
+            <div class="content-area">
+                <!-- Dashboard Page -->
+                <div id="dashboard-page" class="content-page active">
+                    <div class="stats-grid">
+                        <div class="stat-card gradient-purple">
+                            <div class="stat-icon">
+                                <i class="fas fa-book"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-buku">0</h3>
+                                <p>Total Buku</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-blue">
+                            <div class="stat-icon">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-total-anggota">0</h3>
+                                <p>Total Anggota</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-orange">
+                            <div class="stat-icon">
+                                <i class="fas fa-hand-holding-heart"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-dipinjam">0</h3>
+                                <p>Sedang Dipinjam</p>
+                            </div>
+                            <div class="stat-trend">
+                                <i class="fas fa-minus"></i>
+                            </div>
+                        </div>
+                        <div class="stat-card gradient-green">
+                            <div class="stat-icon">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div class="stat-info">
+                                <h3 id="stat-tersedia">0</h3>
+                                <p>Buku Tersedia</p>
+                            </div>
+                            <div class="stat-trend up">
+                                <i class="fas fa-arrow-up"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="dashboard-grid">
+                        <div class="dashboard-card recent-activity">
+                            <div class="card-header">
+                                <h3><i class="fas fa-clock"></i> Peminjaman Aktif</h3>
+                                <a href="#" class="view-all" onclick="navigateTo('peminjaman')">Lihat Semua</a>
+                            </div>
+                            <div class="card-body">
+                                <div id="active-loans-list" class="activity-list">
+                                    <!-- Diisi oleh JavaScript -->
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="dashboard-card quick-actions">
+                            <div class="card-header">
+                                <h3><i class="fas fa-bolt"></i> Aksi Cepat</h3>
+                            </div>
+                            <div class="card-body">
+                                <div class="quick-action-grid">
+                                    <button class="quick-action-btn" onclick="showModal('buku-modal')">
+                                        <i class="fas fa-plus-circle"></i>
+                                        <span>Tambah Buku</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="showModal('anggota-modal')">
+                                        <i class="fas fa-user-plus"></i>
+                                        <span>Tambah Anggota</span>
+                                    </button>
+                                    <button class="quick-action-btn" onclick="showModal('peminjaman-modal')">
+                                        <i class="fas fa-hand-holding"></i>
+                                        <span>Pinjam Buku</span>
+                                    </button>
+                                    <a href="http://127.0.0.1:8000/api/docs/" target="_blank" class="quick-action-btn">
+                                        <i class="fas fa-code"></i>
+                                        <span>API Swagger</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Buku Page -->
+                <div id="buku-page" class="content-page">
+                    <div class="page-header">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="buku-search" placeholder="Cari buku..." oninput="searchBuku()">
+                        </div>
+                        <div class="filter-group">
+                            <select id="buku-filter" onchange="filterBuku()">
+                                <option value="">Semua Buku</option>
+                                <option value="true">Tersedia</option>
+                                <option value="false">Dipinjam</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="showModal('buku-modal')">
+                            <i class="fas fa-plus"></i>
+                            Tambah Buku
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="buku-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Judul</th>
+                                    <th>Penulis</th>
+                                    <th>Tahun</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="buku-tbody">
+                                <!-- Diisi oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Anggota Page -->
+                <div id="anggota-page" class="content-page">
+                    <div class="page-header">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="anggota-search" placeholder="Cari anggota..." oninput="searchAnggota()">
+                        </div>
+                        <button class="btn btn-primary" onclick="showModal('anggota-modal')">
+                            <i class="fas fa-plus"></i>
+                            Tambah Anggota
+                        </button>
+                    </div>
+                    <div class="cards-grid" id="anggota-grid">
+                        <!-- Diisi oleh JavaScript -->
+                    </div>
+                </div>
+
+                <!-- Peminjaman Page -->
+                <div id="peminjaman-page" class="content-page">
+                    <div class="page-header">
+                        <div class="filter-group">
+                            <select id="peminjaman-filter" onchange="filterPeminjaman()">
+                                <option value="">Semua Status</option>
+                                <option value="aktif">Aktif (Dipinjam)</option>
+                                <option value="selesai">Selesai (Dikembalikan)</option>
+                            </select>
+                        </div>
+                        <button class="btn btn-primary" onclick="showModal('peminjaman-modal')">
+                            <i class="fas fa-plus"></i>
+                            Peminjaman Baru
+                        </button>
+                    </div>
+                    <div class="table-container">
+                        <table class="data-table" id="peminjaman-table">
+                            <thead>
+                                <tr>
+                                    <th>ID</th>
+                                    <th>Buku</th>
+                                    <th>Anggota</th>
+                                    <th>Tgl Pinjam</th>
+                                    <th>Tgl Kembali</th>
+                                    <th>Status</th>
+                                    <th>Aksi</th>
+                                </tr>
+                            </thead>
+                            <tbody id="peminjaman-tbody">
+                                <!-- Diisi oleh JavaScript -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Buku Modal -->
+    <div id="buku-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideModal('buku-modal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('buku-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2 id="buku-modal-title"><i class="fas fa-book"></i> Tambah Buku Baru</h2>
+            </div>
+            <form id="buku-form" class="modal-form">
+                <input type="hidden" id="buku-id">
+                <div class="form-group">
+                    <label for="buku-judul">Judul Buku *</label>
+                    <input type="text" id="buku-judul" name="judul" placeholder="Masukkan judul buku" required>
+                </div>
+                <div class="form-group">
+                    <label for="buku-penulis">Penulis *</label>
+                    <input type="text" id="buku-penulis" name="penulis" placeholder="Nama penulis" required>
+                </div>
+                <div class="form-group">
+                    <label for="buku-tahun">Tahun Terbit *</label>
+                    <input type="number" id="buku-tahun" name="tahun" placeholder="2024" min="1900" max="2100" required>
+                </div>
+                <div id="buku-error" class="error-message hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('buku-modal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Anggota Modal -->
+    <div id="anggota-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideModal('anggota-modal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('anggota-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2 id="anggota-modal-title"><i class="fas fa-user-plus"></i> Tambah Anggota Baru</h2>
+            </div>
+            <form id="anggota-form" class="modal-form">
+                <input type="hidden" id="anggota-id">
+                <div class="form-group">
+                    <label for="anggota-nama">Nama Lengkap *</label>
+                    <input type="text" id="anggota-nama" name="nama" placeholder="Masukkan nama lengkap" required>
+                </div>
+                <div class="form-group">
+                    <label for="anggota-email">Email *</label>
+                    <input type="email" id="anggota-email" name="email" placeholder="email@example.com" required>
+                </div>
+                <div id="anggota-error" class="error-message hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('anggota-modal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i>
+                        Simpan
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Peminjaman Modal -->
+    <div id="peminjaman-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideModal('peminjaman-modal')"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="hideModal('peminjaman-modal')">
+                <i class="fas fa-times"></i>
+            </button>
+            <div class="modal-header">
+                <h2><i class="fas fa-hand-holding"></i> Peminjaman Buku</h2>
+            </div>
+            <form id="peminjaman-form" class="modal-form">
+                <div class="form-group">
+                    <label for="peminjaman-buku">Pilih Buku *</label>
+                    <select id="peminjaman-buku" name="buku" required>
+                        <option value="">-- Pilih Buku --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="peminjaman-anggota">Pilih Anggota *</label>
+                    <select id="peminjaman-anggota" name="anggota" required>
+                        <option value="">-- Pilih Anggota --</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="peminjaman-tanggal">Tanggal Pinjam *</label>
+                    <input type="date" id="peminjaman-tanggal" name="tanggal_pinjam" required>
+                </div>
+                <div id="peminjaman-error" class="error-message hidden"></div>
+                <div class="modal-actions">
+                    <button type="button" class="btn btn-outline" onclick="hideModal('peminjaman-modal')">Batal</button>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-check"></i>
+                        Proses Peminjaman
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="hideModal('delete-modal')"></div>
+        <div class="modal-content modal-sm">
+            <div class="modal-header danger">
+                <h2><i class="fas fa-exclamation-triangle"></i> Konfirmasi Hapus</h2>
+            </div>
+            <div class="modal-body">
+                <p id="delete-message">Apakah Anda yakin ingin menghapus data ini?</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn btn-outline" onclick="hideModal('delete-modal')">Batal</button>
+                <button id="delete-confirm-btn" class="btn btn-danger">
+                    <i class="fas fa-trash"></i>
+                    Hapus
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast-container"></div>
+
+    <script src="app.js"></script>
+</body>
+</html>

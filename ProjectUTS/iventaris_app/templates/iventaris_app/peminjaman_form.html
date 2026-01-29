@@ -1,0 +1,13 @@
+{% extends 'iventaris_app/base.html' %}
+
+{% block title %}Form Peminjaman Buku{% endblock %}
+
+{% block content %}
+<h2>Form Peminjaman Buku</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit" class="btn btn-success">Simpan</button>
+    <a href="{% url 'daftar-peminjaman' %}" class="btn btn-secondary">Batal</a>
+</form>
+{% endblock %}

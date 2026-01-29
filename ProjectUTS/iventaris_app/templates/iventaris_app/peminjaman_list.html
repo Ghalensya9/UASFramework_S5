@@ -1,0 +1,65 @@
+{% extends 'iventaris_app/base.html' %}
+{% block title %}Daftar Peminjaman{% endblock %}
+{% block content %}
+<h2>Daftar Peminjaman</h2>
+
+<div class="alert alert-info">
+    <strong>ℹ️ Cara Meminjam Buku:</strong> 
+    Buka halaman <a href="{% url 'daftar-buku' %}" class="alert-link"><strong>Daftar Buku</strong></a> 
+    dan klik tombol <strong>"Pinjam"</strong> pada buku yang tersedia.
+</div>
+
+<div class="table-responsive">
+    <table class="table table-striped table-bordered">
+        <thead class="thead-dark">
+            <tr>
+                <th>Buku</th>
+                <th>Anggota</th>
+                <th>Tanggal Pinjam</th>
+                <th>Tanggal Pengembalian</th>
+                <th>Status</th>
+                <th>Aksi</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for peminjaman in object_list %}
+            <tr>
+                <td>{{ peminjaman.buku.judul }}</td>
+                <td>{{ peminjaman.anggota.nama }}</td>
+                <td>{{ peminjaman.tanggal_pinjam|date:"d-m-Y" }}</td>
+                <td>
+                    {% if peminjaman.tanggal_kembali %}
+                        {{ peminjaman.tanggal_kembali|date:"d-m-Y" }}
+                    {% else %}
+                        <span class="badge badge-warning">Belum Dikembalikan</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if peminjaman.status_peminjaman == 'aktif' %}
+                        <span class="badge badge-danger">Aktif (Dipinjam)</span>
+                    {% else %}
+                        <span class="badge badge-success">Selesai (Dikembalikan)</span>
+                    {% endif %}
+                </td>
+                <td>
+                    {% if peminjaman.status_peminjaman == 'aktif' %}
+                        <form action="{% url 'kembalikan-peminjaman' peminjaman.pk %}" method="post" style="display:inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-success btn-sm" onclick="return confirm('Kembalikan buku ini?')">
+                                Dikembalikan
+                            </button>
+                        </form>
+                    {% endif %}
+                    <a href="{% url 'edit-peminjaman' peminjaman.pk %}" class="btn btn-warning btn-sm">Edit</a>
+                    <a href="{% url 'delete-peminjaman' peminjaman.pk %}" class="btn btn-danger btn-sm" onclick="return confirm('Yakin ingin menghapus?')">Hapus</a>
+                </td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="6" class="text-center text-muted">Belum ada data peminjaman.</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

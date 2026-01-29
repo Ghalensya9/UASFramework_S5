@@ -1,0 +1,60 @@
+{% extends 'iventaris_app/base.html' %}
+{% block title %}Pinjam Buku{% endblock %}
+{% block content %}
+<h2>Pinjam Buku</h2>
+
+<div class="alert alert-info">
+    <strong>Buku yang akan dipinjam:</strong> {{ buku.judul }} ({{ buku.penulis }})
+</div>
+
+{% if messages %}
+    {% for message in messages %}
+        <div class="alert alert-{{ message.tags }}">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
+
+<form method="post" novalidate>
+    {% csrf_token %}
+    
+    <!-- Error Global -->
+    {% if form.non_field_errors %}
+        <div class="alert alert-danger">
+            <strong>❌ Error:</strong>
+            {% for error in form.non_field_errors %}
+                <p>{{ error }}</p>
+            {% endfor %}
+        </div>
+    {% endif %}
+    
+    <div class="form-group">
+        <label for="{{ form.anggota.id_for_label }}">Anggota <span class="text-danger">*</span>:</label>
+        {{ form.anggota }}
+        {% if form.anggota.errors %}
+            <div class="text-danger small">{{ form.anggota.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.tanggal_pinjam.id_for_label }}">Tanggal Pinjam <span class="text-danger">*</span>:</label>
+        {{ form.tanggal_pinjam }}
+        <small class="form-text text-muted">Contoh: 2025-11-26</small>
+        {% if form.tanggal_pinjam.errors %}
+            <div class="text-danger small">{{ form.tanggal_pinjam.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <div class="form-group">
+        <label for="{{ form.tanggal_kembali.id_for_label }}">Tanggal Kembali:</label>
+        {{ form.tanggal_kembali }}
+        <small class="form-text text-muted">Biarkan <strong>KOSONG</strong> jika belum dikembalikan</small>
+        {% if form.tanggal_kembali.errors %}
+            <div class="text-danger small">{{ form.tanggal_kembali.errors }}</div>
+        {% endif %}
+    </div>
+    
+    <button type="submit" class="btn btn-success">Simpan Peminjaman</button>
+    <a href="{% url 'daftar-buku' %}" class="btn btn-secondary">Batal</a>
+</form>
+{% endblock %}

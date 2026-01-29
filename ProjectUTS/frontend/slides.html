@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Slide Presentasi - LibraFlow</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap"
+        rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: #0f172a;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+
+        .slide {
+            width: 100vw;
+            height: 100vh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 60px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            display: flex;
+        }
+
+        /* Background Animation */
+        .bg-gradient {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            z-index: 0;
+        }
+
+        .bg-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.3) 0%, rgba(118, 75, 162, 0.3) 100%);
+            filter: blur(80px);
+            animation: float 8s ease-in-out infinite;
+        }
+
+        .bg-circle.c1 {
+            width: 600px;
+            height: 600px;
+            top: -200px;
+            right: -200px;
+        }
+
+        .bg-circle.c2 {
+            width: 400px;
+            height: 400px;
+            bottom: -100px;
+            left: -100px;
+            animation-delay: 2s;
+        }
+
+        @keyframes float {
+
+            0%,
+            100% {
+                transform: translate(0, 0);
+            }
+
+            50% {
+                transform: translate(30px, 30px);
+            }
+        }
+
+        .content {
+            position: relative;
+            z-index: 1;
+            text-align: center;
+            max-width: 1200px;
+        }
+
+        /* Slide 1: Title */
+        .slide-title .logo {
+            width: 120px;
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3.5rem;
+            margin: 0 auto 40px;
+            box-shadow: 0 20px 60px rgba(102, 126, 234, 0.4);
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+
+            0%,
+            100% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .slide-title h1 {
+            font-size: 5rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 20px;
+            letter-spacing: -2px;
+        }
+
+        .slide-title .subtitle {
+            font-size: 2rem;
+            color: #94a3b8;
+            margin-bottom: 50px;
+        }
+
+        .slide-title .meta {
+            display: flex;
+            gap: 40px;
+            justify-content: center;
+            margin-bottom: 40px;
+        }
+
+        .meta-item {
+            text-align: center;
+        }
+
+        .meta-item label {
+            display: block;
+            font-size: 0.9rem;
+            color: #64748b;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .meta-item span {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #f8fafc;
+        }
+
+        .slide-title .course {
+            padding: 15px 40px;
+            background: rgba(102, 126, 234, 0.2);
+            border: 2px solid rgba(102, 126, 234, 0.5);
+            border-radius: 50px;
+            display: inline-block;
+            font-size: 1.2rem;
+            color: #a78bfa;
+            font-weight: 600;
+        }
+
+        /* Slide 2: Overview */
+        .slide-overview h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 60px;
+        }
+
+        .overview-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+        }
+
+        .overview-card {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 24px;
+            padding: 40px 30px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transition: transform 0.3s ease;
+        }
+
+        .overview-card:hover {
+            transform: translateY(-10px);
+        }
+
+        .overview-card .number {
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            margin: 0 auto 25px;
+        }
+
+        .overview-card h3 {
+            font-size: 1.4rem;
+            font-weight: 700;
+            color: #f8fafc;
+            margin-bottom: 15px;
+        }
+
+        .overview-card p {
+            color: #94a3b8;
+            font-size: 1rem;
+            line-height: 1.6;
+        }
+
+        /* Slide 3: Tech Stack */
+        .slide-tech h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 60px;
+        }
+
+        .tech-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 40px;
+            max-width: 900px;
+        }
+
+        .tech-section {
+            background: rgba(30, 41, 59, 0.8);
+            border-radius: 24px;
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .tech-section.backend {
+            border-color: rgba(59, 130, 246, 0.5);
+        }
+
+        .tech-section.frontend {
+            border-color: rgba(34, 197, 94, 0.5);
+        }
+
+        .tech-section h3 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 25px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .tech-section.backend h3 {
+            color: #60a5fa;
+        }
+
+        .tech-section.frontend h3 {
+            color: #4ade80;
+        }
+
+        .tech-list {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 12px;
+        }
+
+        .tech-item {
+            padding: 12px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #f8fafc;
+            font-weight: 500;
+        }
+
+        /* Slide 4: Features */
+        .slide-features h2 {
+            font-size: 3rem;
+            font-weight: 800;
+            color: #f8fafc;
+            margin-bottom: 60px;
+        }
+
+        .features-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            max-width: 900px;
+        }
+
+        .feature-item {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 25px;
+            background: rgba(30, 41, 59, 0.6);
+            border-radius: 16px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .feature-icon {
+            width: 50px;
+            height: 50px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.3rem;
+            flex-shrink: 0;
+        }
+
+        .feature-text {
+            text-align: left;
+        }
+
+        .feature-text h4 {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #f8fafc;
+            margin-bottom: 5px;
+        }
+
+        .feature-text p {
+            font-size: 0.9rem;
+            color: #94a3b8;
+        }
+
+        /* Slide 5: Thank You */
+        .slide-thanks h2 {
+            font-size: 4rem;
+            font-weight: 900;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f472b6 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin-bottom: 30px;
+        }
+
+        .slide-thanks p {
+            font-size: 1.5rem;
+            color: #94a3b8;
+            margin-bottom: 50px;
+        }
+
+        .slide-thanks .emoji {
+            font-size: 5rem;
+            margin-bottom: 30px;
+        }
+
+        /* Navigation */
+        .nav-dots {
+            position: fixed;
+            bottom: 40px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-dot {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.3);
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .nav-dot.active {
+            background: #667eea;
+            transform: scale(1.3);
+        }
+
+        .nav-arrows {
+            position: fixed;
+            bottom: 40px;
+            right: 40px;
+            display: flex;
+            gap: 15px;
+            z-index: 100;
+        }
+
+        .nav-arrow {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            border: 2px solid rgba(255, 255, 255, 0.2);
+            color: #f8fafc;
+            font-size: 1.2rem;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .nav-arrow:hover {
+            background: rgba(102, 126, 234, 0.3);
+            border-color: #667eea;
+        }
+
+        .slide-counter {
+            position: fixed;
+            top: 40px;
+            right: 40px;
+            font-size: 1rem;
+            color: #64748b;
+            z-index: 100;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Slide 1: Title -->
+    <div class="slide slide-title active" id="slide-1">
+        <div class="bg-gradient"></div>
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="content">
+            <div class="logo">📚</div>
+            <h1>LibraFlow</h1>
+            <p class="subtitle">Sistem Manajemen Perpustakaan Digital</p>
+            <div class="meta">
+                <div class="meta-item">
+                    <label>Nama</label>
+                    <span>Ghalensya Novelan</span>
+                </div>
+                <div class="meta-item">
+                    <label>NIM</label>
+                    <span>23201046 </span>
+                </div>
+                <div class="meta-item">
+                    <label>Kelas</label>
+                    <span>Framework</span>
+                </div>
+            </div>
+            <div class="course">UTS - Mata Kuliah Framework</div>
+        </div>
+    </div>
+
+    <!-- Slide 2: Overview -->
+    <div class="slide slide-overview" id="slide-2">
+        <div class="bg-gradient"></div>
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="content">
+            <h2>📋 Struktur Presentasi</h2>
+            <div class="overview-grid">
+                <div class="overview-card">
+                    <div class="number">1</div>
+                    <h3>Penjelasan Project</h3>
+                    <p>Tujuan aplikasi, fitur utama, dan alasan pemilihan arsitektur decoupled</p>
+                </div>
+                <div class="overview-card">
+                    <div class="number">2</div>
+                    <h3>Demo Aplikasi</h3>
+                    <p>Tampilan dan penggunaan fitur-fitur aplikasi secara langsung</p>
+                </div>
+                <div class="overview-card">
+                    <div class="number">3</div>
+                    <h3>Penjelasan Kode</h3>
+                    <p>Struktur backend Django, alur kerja modul, dan implementasi arsitektur</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 3: Tech Stack -->
+    <div class="slide slide-tech" id="slide-3">
+        <div class="bg-gradient"></div>
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="content">
+            <h2>🛠️ Technology Stack</h2>
+            <div class="tech-grid">
+                <div class="tech-section backend">
+                    <h3>⚙️ Backend</h3>
+                    <div class="tech-list">
+                        <span class="tech-item">Django 5.2</span>
+                        <span class="tech-item">Django REST Framework</span>
+                        <span class="tech-item">SimpleJWT</span>
+                        <span class="tech-item">drf-spectacular</span>
+                        <span class="tech-item">SQLite Database</span>
+                    </div>
+                </div>
+                <div class="tech-section frontend">
+                    <h3>🖥️ Frontend</h3>
+                    <div class="tech-list">
+                        <span class="tech-item">HTML5</span>
+                        <span class="tech-item">CSS3 Modern</span>
+                        <span class="tech-item">Vanilla JavaScript</span>
+                        <span class="tech-item">Fetch API</span>
+                        <span class="tech-item">Dark Theme UI</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 4: Features -->
+    <div class="slide slide-features" id="slide-4">
+        <div class="bg-gradient"></div>
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="content">
+            <h2>✨ Fitur Utama</h2>
+            <div class="features-list">
+                <div class="feature-item">
+                    <div class="feature-icon">🔐</div>
+                    <div class="feature-text">
+                        <h4>JWT Authentication</h4>
+                        <p>Login aman dengan token</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📖</div>
+                    <div class="feature-text">
+                        <h4>CRUD Buku</h4>
+                        <p>Kelola koleksi perpustakaan</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">👥</div>
+                    <div class="feature-text">
+                        <h4>Manajemen Anggota</h4>
+                        <p>Registrasi & data anggota</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">🔄</div>
+                    <div class="feature-text">
+                        <h4>Tracking Peminjaman</h4>
+                        <p>Pinjam & kembalikan buku</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📊</div>
+                    <div class="feature-text">
+                        <h4>Dashboard Statistik</h4>
+                        <p>Ringkasan data real-time</p>
+                    </div>
+                </div>
+                <div class="feature-item">
+                    <div class="feature-icon">📄</div>
+                    <div class="feature-text">
+                        <h4>Swagger Docs</h4>
+                        <p>Dokumentasi API otomatis</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Slide 5: Thank You -->
+    <div class="slide slide-thanks" id="slide-5">
+        <div class="bg-gradient"></div>
+        <div class="bg-circle c1"></div>
+        <div class="bg-circle c2"></div>
+        <div class="content">
+            <div class="emoji">🙏</div>
+            <h2>Terima Kasih</h2>
+            <p>Wassalamualaikum Warahmatullahi Wabarakatuh</p>
+        </div>
+    </div>
+
+    <!-- Navigation -->
+    <div class="nav-dots">
+        <div class="nav-dot active" onclick="goToSlide(1)"></div>
+        <div class="nav-dot" onclick="goToSlide(2)"></div>
+        <div class="nav-dot" onclick="goToSlide(3)"></div>
+        <div class="nav-dot" onclick="goToSlide(4)"></div>
+        <div class="nav-dot" onclick="goToSlide(5)"></div>
+    </div>
+
+    <div class="nav-arrows">
+        <button class="nav-arrow" onclick="prevSlide()">←</button>
+        <button class="nav-arrow" onclick="nextSlide()">→</button>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / 5
+    </div>
+
+    <script>
+        let currentSlide = 1;
+        const totalSlides = 5;
+
+        function updateSlides() {
+            // Update slides
+            document.querySelectorAll('.slide').forEach((slide, index) => {
+                slide.classList.toggle('active', index + 1 === currentSlide);
+            });
+
+            // Update dots
+            document.querySelectorAll('.nav-dot').forEach((dot, index) => {
+                dot.classList.toggle('active', index + 1 === currentSlide);
+            });
+
+            // Update counter
+            document.getElementById('current-slide').textContent = currentSlide;
+        }
+
+        function nextSlide() {
+            if (currentSlide < totalSlides) {
+                currentSlide++;
+                updateSlides();
+            }
+        }
+
+        function prevSlide() {
+            if (currentSlide > 1) {
+                currentSlide--;
+                updateSlides();
+            }
+        }
+
+        function goToSlide(n) {
+            currentSlide = n;
+            updateSlides();
+        }
+
+        // Keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                prevSlide();
+            }
+        });
+    </script>
+</body>
+
+</html>

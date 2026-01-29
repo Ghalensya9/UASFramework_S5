@@ -1,0 +1,109 @@
+{% extends 'iventaris_app/base.html' %}
+{% block title %}Tambah Anggota{% endblock %}
+{% block content %}
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-lg">
+                <div class="card-header bg-info text-white">
+                    <h3 class="mb-0">👥 Tambah Anggota Baru</h3>
+                </div>
+                
+                <div class="card-body">
+                    {% if form.non_field_errors %}
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            <strong>❌ Error:</strong>
+                            {% for error in form.non_field_errors %}
+                                <p>{{ error }}</p>
+                            {% endfor %}
+                            <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    {% endif %}
+
+                    <form method="post" novalidate>
+                        {% csrf_token %}
+
+                        <!-- Nama Field -->
+                        <div class="form-group">
+                            <label for="{{ form.nama.id_for_label }}" class="font-weight-bold">
+                                Nama <span class="text-danger">*</span>
+                            </label>
+                            {{ form.nama }}
+                            {% if form.nama.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.nama.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">Masukkan nama lengkap anggota</small>
+                        </div>
+
+                        <!-- Email Field -->
+                        <div class="form-group">
+                            <label for="{{ form.email.id_for_label }}" class="font-weight-bold">
+                                Email <span class="text-danger">*</span>
+                            </label>
+                            {{ form.email }}
+                            {% if form.email.errors %}
+                                <div class="invalid-feedback d-block">
+                                    {{ form.email.errors }}
+                                </div>
+                            {% endif %}
+                            <small class="form-text text-muted">Contoh: anggota@email.com</small>
+                        </div>
+
+                        <!-- Tombol -->
+                        <div class="form-group mt-4">
+                            <button type="submit" class="btn btn-success btn-lg btn-block">
+                                ✅ Simpan Anggota
+                            </button>
+                            <a href="{% url 'daftar-buku' %}" class="btn btn-secondary btn-lg btn-block mt-2">
+                                ❌ Batal
+                            </a>
+                        </div>
+                    </form>
+
+                    <!-- --------- Tambahan Tombol Riwayat Anggota ----------- -->
+                    <div class="text-center mt-3">
+                            🔍 Lihat Daftar & Riwayat Anggota
+                        </a>
+                    </div>
+                    <!-- --------------------------------------------------- -->
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        border-radius: 10px;
+        border: none;
+    }
+    .card-header {
+        border-radius: 10px 10px 0 0;
+        padding: 1.5rem;
+    }
+    .form-control {
+        border-radius: 6px;
+        border: 1px solid #ddd;
+        padding: 0.75rem;
+        font-size: 1rem;
+    }
+    .form-control:focus {
+        border-color: #17a2b8;
+        box-shadow: 0 0 0 0.2rem rgba(23, 162, 184, 0.25);
+    }
+    .invalid-feedback {
+        color: #dc3545;
+        font-size: 0.875rem;
+        margin-top: 0.5rem;
+    }
+    .text-danger {
+        color: #dc3545;
+    }
+</style>
+
+{% endblock %}

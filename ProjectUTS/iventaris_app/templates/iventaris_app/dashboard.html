@@ -1,0 +1,43 @@
+{% extends 'iventaris_app/base.html' %}
+{% block title %}Dashboard{% endblock %}
+{% block content %}
+<h2 class="mb-4 text-center" >Dashboard</h2>
+<div class="row">
+  <div class="col-sm-6 col-md-3 mb-4">
+    <div class="card shadow border-0 text-center h-100">
+      <div class="card-body py-4">
+        <div class="mb-2" style="font-size: 2rem;">📚</div>
+        <h6 class="mb-1 font-weight-bold">Total Buku</h6>
+        <h3 class="text-primary mb-0">{{ total_buku }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3 mb-4">
+    <div class="card shadow border-0 text-center h-100">
+      <div class="card-body py-4">
+        <div class="mb-2" style="font-size: 2rem;">👤</div>
+        <h6 class="mb-1 font-weight-bold">Total Anggota</h6>
+        <h3 class="text-success mb-0">{{ total_anggota }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3 mb-4">
+    <div class="card shadow border-0 text-center h-100">
+      <div class="card-body py-4">
+        <div class="mb-2" style="font-size: 2rem;">🔖</div>
+        <h6 class="mb-1 font-weight-bold">Sedang Dipinjam</h6>
+        <h3 class="text-warning mb-0">{{ total_dipinjam }}</h3>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-md-3 mb-4">
+    <div class="card shadow border-0 text-center h-100">
+      <div class="card-body py-4">
+        <div class="mb-2" style="font-size: 2rem;">✅</div>
+        <h6 class="mb-1 font-weight-bold">Sudah Dikembalikan</h6>
+        <h3 class="text-info mb-0">{{ total_selesai }}</h3>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
